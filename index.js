@@ -4,18 +4,26 @@ console.log("hi");
 
 const getUserData = (username) => `{
     search(type: USER, query: "${username}", first: 1) {
-    repositoryCount
     edges {
       node {
         ... on User {
           repositories(first: 20) {
+            totalCount
             nodes {
               name
+              primaryLanguage {
+                color
+                name
+              }
+              stargazerCount
+              updatedAt
+              forkCount
             }
           }
         }
       }
     }
+  }
 }`;
 
 const renderUser = ({ data }) => {
@@ -37,13 +45,13 @@ const loadUserProfile = async (e) => {
 	const username = form.elements["search"].value;
 
 	const options = {
-		method: "POST",
+		method: `post`,
 		headers: {
 			"Content-Type": "application/json",
+			Accept: `application/json`,
 			"Access-Control-Allow-Origin": "*",
-            "mode": "no-cors",
-			"Access-Control-Allow-Headers":
-				"Origin, X-Requested-With, Content-Type, Accept ",
+			mode: "no-cors",
+			Authorization: `bearer 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`,
 		},
 
 		body: JSON.stringify({
@@ -52,11 +60,12 @@ const loadUserProfile = async (e) => {
 	};
 
 	await fetch(`https://developer.github.com/v4/explorer/`, options)
-		.then((res) => res.json())
-		.then(renderUser)
-        .catch((err) => {
-            console.log(err)
-        })
+		// .then((res) => res.json())
+		.then((res) => console.log(res))
+		// .then(renderUser)
+		.catch((err) => {
+			console.log(err);
+		});
 
 	// form.reset();
 };
