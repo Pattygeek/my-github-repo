@@ -54,7 +54,7 @@ const loadUserProfile = async (e) => {
 		method: `post`,
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `bearer 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`,
+			Authorization: `Bearer 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`,
 		},
 
 		body: JSON.stringify({
