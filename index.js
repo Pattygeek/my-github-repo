@@ -1,4 +1,6 @@
 const form = document.querySelector("#user-search");
+const userContainer = document.querySelector("#user-cont");
+const search = document.querySelector("#search");
 
 console.log("hi");
 
@@ -7,6 +9,15 @@ const getUserData = (username) => `{
     edges {
       node {
         ... on User {
+        name
+        avatarUrl
+        bio
+        login
+         status {
+            emoji
+            message
+            emojiHTML
+          }
           repositories(first: 20) {
             totalCount
             nodes {
@@ -27,17 +38,23 @@ const getUserData = (username) => `{
 }`;
 
 const renderUser = ({ data }) => {
-	const {
-		search: {
-			edges: {
-				node: {
-					repositories: { nodes },
-				},
-			},
-		},
-	} = data;
+	const repo = data?.search?.edges?.[0]?.node?.repositories.nodes;
+	const repoCount = data?.search?.edges?.[0]?.node?.repositories.totalCount;
+	const repoInfo = data?.search?.edges?.[0]?.node;
 
-	console.log(nodes);
+	// const [repositories] = node;
+	if (data.search.edges.length === 0) {
+		console.log("user not found");
+	} else {
+		console.log(repoInfo);
+	}
+
+	// console.log(repoInfo);
+	localStorage.setItem("user", JSON.stringify(repoInfo));
+	userContainer.innerHTML = `<div class="user-container">
+    <p style="margin: 0">${repoInfo ? repoInfo.name : `User not found`}</p>
+    <a href="index.html">${repoInfo ? `View Profile` : ``}</a>
+    </div>`;
 };
 
 const loadUserProfile = async (e) => {
@@ -48,10 +65,7 @@ const loadUserProfile = async (e) => {
 		method: `post`,
 		headers: {
 			"Content-Type": "application/json",
-			Accept: `application/json`,
-			"Access-Control-Allow-Origin": "*",
-			mode: "no-cors",
-			Authorization: `bearer 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`,
+			Authorization: `bearer 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`,
 		},
 
 		body: JSON.stringify({
@@ -59,10 +73,9 @@ const loadUserProfile = async (e) => {
 		}),
 	};
 
-	await fetch(`https://developer.github.com/v4/explorer/`, options)
-		// .then((res) => res.json())
-		.then((res) => console.log(res))
-		// .then(renderUser)
+	await fetch(`https://api.github.com/graphql`, options)
+		.then((res) => res.json())
+		.then(renderUser)
 		.catch((err) => {
 			console.log(err);
 		});
