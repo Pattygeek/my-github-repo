@@ -9,7 +9,6 @@ import { GITHUB_KEY } from "./apikey.js";
 // 	},
 // };
 
-console.log(GITHUB_KEY);
 
 const form = document.querySelector("#user-search");
 const userContainer = document.querySelector("#user-cont");
