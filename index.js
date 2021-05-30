@@ -1,7 +1,19 @@
+import { GITHUB_KEY } from "./apikey.js";
+
+// dotenv.config();
+
+// require("dotenv").config();
+// window.process = {
+// 	env: {
+// 		NODE_ENV: "development",
+// 	},
+// };
+
+console.log(GITHUB_KEY);
+
 const form = document.querySelector("#user-search");
 const userContainer = document.querySelector("#user-cont");
 const search = document.querySelector("#search");
-
 
 const getUserData = (username) => `{
     search(type: USER, query: "${username}", first: 1) {
@@ -45,7 +57,6 @@ const renderUser = ({ data }) => {
     </div>`;
 };
 
-
 const loadUserProfile = async (e) => {
 	e.preventDefault();
 	const username = form.elements["search"].value;
@@ -54,7 +65,7 @@ const loadUserProfile = async (e) => {
 		method: `post`,
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer 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`,
+			Authorization: `Bearer ${GITHUB_KEY}`,
 		},
 
 		body: JSON.stringify({

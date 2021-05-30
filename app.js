@@ -1,4 +1,11 @@
+// import dotenv from 'dotenv';
+
+require("dotenv").config();
+console.log(process.env);
+
 const userData = JSON.parse(localStorage.getItem("user"));
+// const GITHUB = process.env.GITHUB
+
 
 //Date Formater
 function formatDate(date) {
